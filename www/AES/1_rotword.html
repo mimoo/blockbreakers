@@ -1,0 +1,28 @@
+<p>AES is a block cipher that can encrypt and decrypt no-more-no-less than 128 bits of plaintext. This limitation is usually circumvented by using a <a href="https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation">mode of operation</a> along with a padding algorithm on top of a block cipher. But this is not important for us here, as we are aiming to attack the core of block ciphers, not their usage.</p>
+
+<div class="ui icon yellow message">
+	<i class="info circle icon"></i>
+	<div class="content">
+		If you are interested in mode of operations vulnerabilities. <a href="http://www.cryptopals.com">The Cryptopals challenges</a> do a great job demonstrating the weaknesses of a lot of them.
+	</div>
+</div>
+
+<p>In addition of a 128-bit plaintext, AES also takes a <strong>variable sized key</strong>. In our attacks we will use AES-128 which uses, as its name suggests, a <strong>128-bit key</strong>. But know that there exist two other variants of AES called AES-192 and AES-256, taking respectively 192-bit and 256-bit keys and having their implementation differ slightly from AES-128.</p>
+<p>To transform a plaintext into a ciphertext, AES makes it undergo a number of transformations, one of them is to XOR it with keys. Since we only provide AES with <strong>a single key</strong>, AES will need to derive a number of keys from it. This number will vary accordingly to the version of AES you are using. Since we will use AES-128, we will need it to derive exactly 11 keys.</p>
+<p>Let's name these concepts:</p>
+<ul>
+<li>these derived keys are called <strong>round keys</strong> (or commonly <strong>subkeys</strong>)</li>
+<li>the process used to derive these subkeys is called a <strong>key expansion</strong> (or commonly a <strong>key schedule</strong>)</li>
+</ul>
+<div class="ui divider"></div>
+<p>We will create three different functions to help us build the <code>KeyExpansion()</code> function:</p>
+	<ul>
+		<li><code>RotWord()</code></li>
+		<li><code>SubWord()</code></li>
+		<li><code>Rcon()</code></li>
+	</ul>
+<p>The first we will implement is <code>RotWord</code>. So open your IDE/text editor and implement a <code>RotWord()</code> function. It should take as input a value of 4 bytes and return as output a rotation of these 4 bytes as shown in the diagram below:</p>
+
+<img src="images/AES/key_schedule-07.jpg" class="ui image centered">
+
+<p>Test your function and make sure it works :) When you're done, go to the next step.</p>

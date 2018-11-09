@@ -1,0 +1,20 @@
+<p>Let's finally take a look at what a round looks like!</p>
+<p><img src="images/AES/key_schedule-06.png" alt="round"></p>
+
+<p>That's right. Here's are all the operations that are computed on the state, in order:</p>
+<ol>
+	<li>SubBytes</li>
+	<li>ShiftRows</li>
+	<li>MixColumns</li>
+	<li>AddRoundKey</li>
+</ol>
+
+<p>And that's all there is to a <strong>round</strong>. AES-128, the variant of AES that takes a 128-bit key, has 10 rounds in total. <strong>Each round takes as input a different round key and the previous round's output</strong>. Note that the last round is a bit different from the other rounds, <strong>the last round skips the MixColumns transformation</strong>. With that in mind we will start by implementing <strong>SubBytes</strong>, the first transformation in an AES round.</p>
+
+<div class="ui divider"></div>
+
+<p>Create a <code>subBytes()</code> function that takes a state, and returns or modify the new state after the SubBytes transformation.</p> 
+
+<p>What is the SubBytes transformation? It is an <strong>S-box</strong>: it takes a byte and returns a corresponding byte according to a look-up table. We've already covered that in the <a href="aes_2_subword.html" class="ui blue image label"><img src="images/AES/aes_icons-03.jpg">SubWord</a> function, and good news, this one uses the same S-box.</p>
+<p>If you want to test your function, you can use the values of this page's diagram.</p>
+<p>Once you're done, go on to the next step!</p>

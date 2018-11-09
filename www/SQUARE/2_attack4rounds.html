@@ -1,0 +1,71 @@
+<p>Remember what happened to our <em>Λ-set</em> after we've reached the end of 3 rounds</p>
+
+<img class="ui centered image" src="images/SQUARE/SQUARE-08.jpg">
+
+<p>We do not have a <em>Λ-set</em> anymore, but we know that we still have some kind of special structure. If we XOR the bytes of one index from the states of our <em>Λ-set</em>, they will sum up to \( 0 \).</p>
+
+<p>Now what would happen if we added another round on top of that? <strong>The next SubBytes transformation destroys our observations</strong>. After this, we're in the <a class="ui purple label">unknown</a>.</p>
+
+<div class="ui message">
+	<p>In this section, we'll attack <span class="em">4-round AES</span> (with 128-bit keys). So you can imagine that this 4th round is the last round of our variant of AES, and as we know, since it's the last round it doesn't have the MixColumns transformation.</p>
+</div>
+
+<img class="ui centered image" src="images/SQUARE/SQUARE-09.jpg">
+
+<p>You might already have guessed what "good" this unkonwn brings for our cryptanalysis. And this is a theme that we will keep running into in different sorts of cryptanalysis. <strong>This unknown allows us to make a guess on the last round key and verify the guess</strong>.</p>
+
+<div class="ui message">
+	<p>There exist several types of results for a cryptanalysis. We're currently looking at a <strong>total break</strong>, which will obtain us <strong>the cipher's secret key</strong>. Other weaker results can recover the plaintext without revealing the secret key, or even just allow you to <strong>distinguish</strong> from a set of ciphertexts what cipher was used to obtain them (here we already know that we're dealing with AES).</p> 
+</div>
+
+<div class="ui divider"></div>
+
+<p>Imagine that <strong>you make a guess for the first byte of the last round key</strong>. You can now reverse the value of the state, from each of your <a class="ui grey label">ciphertext</a> (which you know, this is a <strong>chosen-plaintext attack</strong>) up until the state where we know our observations hold.</p>
+
+<div class="ui message">
+	<p>There exist several classes of attacks, which are ranked according to how much leway the attacker gets. A <strong>chosen-plaintext attack</strong> is when the attacker can encrypt any plaintexts he wants, and observe the resulting ciphertexts. A <strong>ciphertext-only attack</strong> is when an attacker only have access to a set of ciphertexts. The latter one is obviously weaker, but is ranked as a stronger attack. This is because if an attacker can use this little information to break a cipher, then his attack is pretty good :)</p> 
+</div>
+
+<p>At this point, it's enough to XOR all of the <a class="ui pink label">reversed bytes</a> at the state right before the last SubBytes to check if they XOR out to \( 0 \). If they do, you might really well have guessed the right byte for the last round key.</p>
+
+<p>The point is then to find the value of the last round key byte-by-byte.</p>
+
+<img class="ui centered image" src="images/SQUARE/SQUARE-10.jpg">
+
+<div class="ui divider"></div>
+
+<p>Now it's your turn!</p>
+
+<ol class="incremental" style="list-style-type: decimal">
+<li>Modify your reduced version of AES to now apply 4 rounds instead of the previous 3. Remember, the last round does not make use of the MixColumns transformation. Your <code>setup()</code> function should now use this <span class="em">4-round AES</span>.</li>
+<li>Create a function named <code>reverseState()</code> that takes a key guess of one byte, the position of that key guess and the encrypted <em>Λ-set</em> returned by the <code>setup()</code> function. It should then reverse the byte at that position on every element of the <em>Λ-set</em>, up until the beginning of the last round. It should then return this set of reversed bytes.</li>
+<li>Create a function named <code>checkKeyGuess()</code> that takes the key guess of one byte and the set of byte values returned by the <code>reverseState()</code> function. The function should try to XOR all the given bytes and check if the result equals \(0\). If it is, you might have found a key! Display the byte guessed. Otherwise do nothing.</li>
+</ol>
+
+<p>At this point, make sure that things work. You should test <code>reverseState</code> and <code>checkKeyGuess</code>. Use:</p>
+
+<ul class="incremental">
+<li>The real byte of the key at index 5 as your key guess.</li>
+<li>The index 5.</li>
+<li>The Λ-set produced by <code>setup()</code></li>
+</ul>
+
+<p>If <code>checkKeyGuess()</code> finds out that the XOR is indeed \(0\), you're good. Otherwise meditate for 5 minutes and correct your code.</p>
+
+<div class="ui divider"></div>
+
+<p>You now have enough functions to code your general attack.</p>
+
+<p>What you will do, to find out one byte of the last round key, is to loop through all the 256 possible values of that byte and feed them to your freshly created functions.<br>
+	But because an invalid guessed key byte might sometimes gives you a false positive, you will want to test all of them before taking a conclusion.</p>
+
+<p>For this, you will have to modify your <code>checkKeyGuess()</code> function to keep track of what guess seem valid or not.</p>
+
+<ol class="incremental" style="list-style-type: decimal">
+	<li>Loop through all the possible byte for a given index and validate each guess. When a valid guess is found, update a list to keep track of what guesses are valid so far.</p>
+	<li>Create a function that checks if there is more than one valid byte guess in the list. If there is only one valid key guess, then you've found the real key byte of the last round key at this position.<br>
+			If you have more than one valid key guess, you need to test the remaining valid bytes of your list with a new encrypted <em>Λ-set</em>. Remember: you can use the <code>setup()</code> function for that: it is supposed to generate a random <em>Λ-set</em> at every call. Do this until only one guess remains in your list.</li>
+	<li>Now that you have the algorithm working for finding one byte of the last round key, iterate it over all the byte positions of the last round key until you found all of them. The algorithm should be really fast. (On my year old device it runs in one second.)</li>
+</ol>
+
+<p>Make sure to test the values you obtain. The next section will show you how to obtain the main secret key from this last round key.</p>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<!-- Standard Meta -->
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+		<!-- Site Properties -->
+		<title>Block Breakers - Attacking 5 rounds with the Square attack </title>
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/reset.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/site.css">
+
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/container.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/grid.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/header.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/image.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/menu.css">
+
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/divider.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/dropdown.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/segment.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/button.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/list.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/icon.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/sidebar.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/transition.css">
+
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/step.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/item.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/message.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/progress.min.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/table.min.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/label.css">
+
+		<!-- js -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.js"></script>
+
+		<script>
+			$(document)
+			.ready(function() {
+			//
+			})
+		</script>
+
+		<!-- highlighter code -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.0.0/highlight.min.js"></script>
+		<script>hljs.initHighlightingOnLoad();</script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.0.0/styles/default.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/styles/monokai-sublime.min.css">
+
+		<!-- latex -->
+		<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">		</script>
+
+		<!-- font -->
+		<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet"> 
+
+		<!-- custom -->
+		<link rel="stylesheet" type="text/css" href="css/styles.css">
+
+	</head>
+
+	<body>
+		
+		<!-- Page Contents -->
+		<div class="ui text container">
+
+			<div class="ui secondary menu">
+				<a class="item" href="index.html">HOME</a>
+				<a class="item" href="aes.html">AES</a>
+				<a class="active item" href="square.html">SQUARE</a>
+				<a class="disabled item" href="#">LINEAR</a>
+				<a class="disabled item" href="#">DIFFERENTIAL</a>
+			</div>
+
+			<!-- progress bar -->
+			<div class="ui progress success">
+				<div class="bar" style="width:80.0%">
+
+				</div>
+			</div>
+
+			<!-- content -->
+			<h2 class="ui top attached header">Attacking 5 rounds with the Square attack</h2>
+			<div class="ui attached stacked segment">
+
+				<p>Now that we've broken <span class="em">4-round AES</span>, let's try and see what we can do if we add an extra round at the end to make it a <span class="em">5-round AES</span>.</p>
+
+<img class="ui centered image" src="images/SQUARE/SQUARE-11.jpg">
+
+<p>You could guess 4 bytes of the last <em>round key</em> to reverse the state until the end of the 4th round (second to last round). Right after XORing it with the penultimate <em>round key</em>. Here you could also guess 4 bytes of that last <em>round key</em> to continue the relevant bytes and end up by performing the same attack as the previous one. In total we have to guess 8 bytes of subkeys to start the attack, that's already a lot.</p>
+
+<p>What if we could swap the penultimate round's MixColumn operation with the AddRoundKey operation? That would allow us to only guess one byte of the penultimate <em>round key</em>.</p>
+
+<img class="ui centered image" src="images/SQUARE/SQUARE-13.jpg">
+
+<p>Well guess what. We can. Sort of.</p>
+
+<p>How to do?</p>
+
+<p>The MixColumns is linear with respect to the column input. This is a fancy way to mean:</p>
+
+\[
+\begin{align*}
+&\text{MixColumns}(\text{state)} \oplus \text{RoundKey} \\
+= &\text{MixColumns}(\text{state}) \oplus \text{MixColumns}(\text{MixColumnsInv}(\text{RoundKey})) \\
+= &\text{MixColumns}(\text{state } \oplus \text{MixColumnsInv}(\text{RoundKey}))
+\end{align*}
+\]
+
+<ol>
+	<li>The first line represented our state after the penultimate MixColumns followed by the AddRoundKey transformation.</li>
+	<li>The last line represent the state we wanted to achieve: the AddRoundKey transformation now happens after the MixColumns operation. It's enough to allow us to do our attack without having to guess 4 bytes of the penultimate <em>round key</em>, but instead only a single byte of the penultimate <code>MixColumnsInv(RoundKey)</code>.</li>
+</ol>
+
+<p>In total, with the four bytes of the last <em>round key</em>, we now have to guess 5 bytes to recover one byte of the last <em>round key</em>. Here's how the final attack now looks like:</p>
+
+<img class="ui centered image" src="images/SQUARE/SQUARE-12.jpg">
+
+<div class="ui divider"></div>
+
+<p>This attack is taking too much computing power already. To cover 5 bytes of key you need to test \(2^{8*5} = 2^{40}\) possibilities tops. This is not impossible, just not fun as an unoptimized code and an OK machine will take too long to finish the attack.</p>
+
+<p>Instead we will satisfy ourselves with these explanations, and maybe even try to understand how to extend this attack to <span class="em">6-round AES</span> in the next section.</p>
+
+
+				
+				<div class="ui divider"></div>
+				<div style="text-align:center;">
+				<a class="ui right labeled icon button positive" href="square_5_attack6rounds.html">
+					<i class="right arrow icon"></i>
+					Next
+				</a>
+				</div>
+				
+
+			</div>
+
+
+
+		</div>
+
+		
+		<!-- end of container -->
+
+
+		<!-- footer -->
+		<div class="ui vertical footer segment">
+			<div class="ui container">
+				<div class="ui divided centered grid">
+
+					<div class="three wide column">
+						<h4 class="ui header">About</h4>
+						<div class="ui link list">
+							<a href="https://cryptoservices.github.io" class="item">Cryptography Services</a>
+							<a href="https://www.nccgroup.trust" class="item">NCC Group</a>
+							<a href="#" class="item">Contact Us</a>
+						</div>
+					</div>
+					<div class="three wide column">
+						<h4 class="ui header">Friends</h4>
+						<div class="ui link list">
+							<a href="https://www.cryptopals.com" class="item">Cryptopals</a>
+							<a href="https://www.microcorruption.com" class="item">Microcorruption</a>
+						</div>
+					</div>
+					<div class="three wide column">
+						<h4 class="ui header">Block Breakers</h4>
+						<p>A Cryptography Services initiative.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</body>
+</html>

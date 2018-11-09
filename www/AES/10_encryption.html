@@ -1,0 +1,34 @@
+<p>We're almost done! Now is time to combine all the functions we've created into a single <code>encrypt()</code> function</p>
+
+<p>The first phase is called "<strong>pre-whitening</strong>". And is to ⊕ (XOR) your state (which right now is your plaintext) with the first round key (which is the original key provided to AES).</p>
+
+<img class="ui centered image" src="images/AES/key_schedule-09.jpg">
+
+<p>This <strong>pre-whitening</strong> is done to avoid losing the first few transformations to the attacker. If no XOR with a round key was in place, the attacker could compute the internal state of AES up to the <strong>AddRoundKey</strong> operation of the first round (and ignore the first few transformations).</p>
+
+<p>After this, exactly n-1 rounds take place. In the case of AES-128 this would be <strong>9 rounds</strong>. Each round will take the subsequent round key. (Starting with the second round key, since we already used the first in the pre-whitening phase.) Here is what a round looks like:</p>
+
+<img class="ui centered image" src="images/AES/key_schedule-10.jpg">
+
+<p>Finally, <strong>a last round takes place</strong>, but this time the MixColummns transformation is skipped. And if you counted correctly, the final and 11th key is used in the AddRoundKey transformation.</p>
+
+<img class="ui centered image" src="images/AES/key_schedule-11.jpg">
+
+<p>And that's it! That's all there is to AES' encryption.</p>
+
+<div class="ui divider"></div>
+
+<p>Implement the <code>encrypt()</code> function. Then encrypt this text: <code>theblockbreakers</code> with the following key:</p>
+
+<pre>2b7e151628aed2a6abf7158809cf4f3c</pre>
+
+<p>and verify that you get the following ciphertext:</p>
+
+<pre>
+c6 02 23 2f
+9f 5a 93 05
+25 9e f6 b7
+d0 f3 3e 47
+</pre>	
+
+<p><strong>Remember</strong>: to test your function, you can use the test vectors from the appendix A.1 of the <a href="http://csrc.nist.gov/publications/fips/fips197/fips-197.pdf">AES standard</a>. We also gave some other good resources to understand and test your implementation <a href="aes.html">in the main page of this set</a>.</p>

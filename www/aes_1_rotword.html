@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<!-- Standard Meta -->
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+		<!-- Site Properties -->
+		<title>Block Breakers - 1. The Key Expansion Part 1: RotWord </title>
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/reset.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/site.css">
+
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/container.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/grid.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/header.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/image.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/menu.css">
+
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/divider.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/dropdown.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/segment.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/button.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/list.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/icon.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/sidebar.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/transition.css">
+
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/step.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/item.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/message.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/progress.min.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/table.min.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/label.css">
+
+		<!-- js -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.js"></script>
+
+		<script>
+			$(document)
+			.ready(function() {
+			//
+			})
+		</script>
+
+		<!-- highlighter code -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.0.0/highlight.min.js"></script>
+		<script>hljs.initHighlightingOnLoad();</script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.0.0/styles/default.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/styles/monokai-sublime.min.css">
+
+		<!-- latex -->
+		<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">		</script>
+
+		<!-- font -->
+		<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet"> 
+
+		<!-- custom -->
+		<link rel="stylesheet" type="text/css" href="css/styles.css">
+
+	</head>
+
+	<body>
+		
+		<!-- Page Contents -->
+		<div class="ui text container">
+
+			<div class="ui secondary menu">
+				<a class="item" href="index.html">HOME</a>
+				<a class="active item" href="aes.html">AES</a>
+				<a class="item" href="square.html">SQUARE</a>
+				<a class="disabled item" href="#">LINEAR</a>
+				<a class="disabled item" href="#">DIFFERENTIAL</a>
+			</div>
+
+			<!-- progress bar -->
+			<div class="ui progress success">
+				<div class="bar" style="width:9.09090909091%">
+
+				</div>
+			</div>
+
+			<!-- content -->
+			<h2 class="ui top attached header">1. The Key Expansion Part 1: RotWord</h2>
+			<div class="ui attached stacked segment">
+
+				<p>AES is a block cipher that can encrypt and decrypt no-more-no-less than 128 bits of plaintext. This limitation is usually circumvented by using a <a href="https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation">mode of operation</a> along with a padding algorithm on top of a block cipher. But this is not important for us here, as we are aiming to attack the core of block ciphers, not their usage.</p>
+
+<div class="ui icon yellow message">
+	<i class="info circle icon"></i>
+	<div class="content">
+		If you are interested in mode of operations vulnerabilities. <a href="http://www.cryptopals.com">The Cryptopals challenges</a> do a great job demonstrating the weaknesses of a lot of them.
+	</div>
+</div>
+
+<p>In addition of a 128-bit plaintext, AES also takes a <strong>variable sized key</strong>. In our attacks we will use AES-128 which uses, as its name suggests, a <strong>128-bit key</strong>. But know that there exist two other variants of AES called AES-192 and AES-256, taking respectively 192-bit and 256-bit keys and having their implementation differ slightly from AES-128.</p>
+<p>To transform a plaintext into a ciphertext, AES makes it undergo a number of transformations, one of them is to XOR it with keys. Since we only provide AES with <strong>a single key</strong>, AES will need to derive a number of keys from it. This number will vary accordingly to the version of AES you are using. Since we will use AES-128, we will need it to derive exactly 11 keys.</p>
+<p>Let's name these concepts:</p>
+<ul>
+<li>these derived keys are called <strong>round keys</strong> (or commonly <strong>subkeys</strong>)</li>
+<li>the process used to derive these subkeys is called a <strong>key expansion</strong> (or commonly a <strong>key schedule</strong>)</li>
+</ul>
+<div class="ui divider"></div>
+<p>We will create three different functions to help us build the <code>KeyExpansion()</code> function:</p>
+	<ul>
+		<li><code>RotWord()</code></li>
+		<li><code>SubWord()</code></li>
+		<li><code>Rcon()</code></li>
+	</ul>
+<p>The first we will implement is <code>RotWord</code>. So open your IDE/text editor and implement a <code>RotWord()</code> function. It should take as input a value of 4 bytes and return as output a rotation of these 4 bytes as shown in the diagram below:</p>
+
+<img src="images/AES/key_schedule-07.jpg" class="ui image centered">
+
+<p>Test your function and make sure it works :) When you're done, go to the next step.</p>
+
+
+				
+				<div class="ui divider"></div>
+				<div style="text-align:center;">
+				<a class="ui right labeled icon button positive" href="aes_2_subword.html">
+					<i class="right arrow icon"></i>
+					Next
+				</a>
+				</div>
+				
+
+			</div>
+
+
+
+		</div>
+
+		
+		<!-- end of container -->
+
+
+		<!-- footer -->
+		<div class="ui vertical footer segment">
+			<div class="ui container">
+				<div class="ui divided centered grid">
+
+					<div class="three wide column">
+						<h4 class="ui header">About</h4>
+						<div class="ui link list">
+							<a href="https://cryptoservices.github.io" class="item">Cryptography Services</a>
+							<a href="https://www.nccgroup.trust" class="item">NCC Group</a>
+							<a href="#" class="item">Contact Us</a>
+						</div>
+					</div>
+					<div class="three wide column">
+						<h4 class="ui header">Friends</h4>
+						<div class="ui link list">
+							<a href="https://www.cryptopals.com" class="item">Cryptopals</a>
+							<a href="https://www.microcorruption.com" class="item">Microcorruption</a>
+						</div>
+					</div>
+					<div class="three wide column">
+						<h4 class="ui header">Block Breakers</h4>
+						<p>A Cryptography Services initiative.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</body>
+</html>

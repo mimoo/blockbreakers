@@ -1,0 +1,9 @@
+<p>Differential cryptanalysis <a href="http://link.springer.com/chapter/10.1007/3-540-46416-6_1">was first published in 1990, where Biham and Shamir showed how they could break the FEAL-8 cipher</a> with it. It is a statistical attack that works on the XOR differences between pairs of plaintexts (P1, P2) and their respective pairs of ciphertexts (E(P1), E(P2)).</p>
+
+<p>If you have completed <a href="square.html" class="ui blue image label"><img src="images/SQUARE/square_icons-03.jpg">Set 2</a> on the Square attack, you should know how cryptanalysis work in general: You observe a property that is supposed to hold; you then use it to predict the internal state of the cipher up until the last round in order to make guesses on that last round key; guesses can be verified by reversing the known ciphertexts up until the predicted internal state.</p>
+
+<p>But let's not go to fast here, let's first see what I meant by XOR differences of pairs of plaintexts. Let's start with a very simple Cipher:</p>
+
+<img src="images/DIFFERENTIAL/differential-02.png">
+
+<p>This is basically a one-time pad on ? </p>

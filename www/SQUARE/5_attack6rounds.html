@@ -1,0 +1,34 @@
+<p>This is the final extension of the SQUARE attack we will talk about.</p>
+
+<p>We can gain an extra round by <strong>adding a round at the beginning</strong>. Here's how it works:</p>
+
+<p>The extra round placed at the beginning will output the <em>Λ-set</em> we had in the <a href="aes.html" class="ui blue image label"><img src="images/SQUARE/square_icons-05.jpg">previous attack</a> at the beginning of its first round.</p>
+<p>
+	<strong>This way nothing is modified in the way we perform our attack</strong>.
+</p>
+
+<p>Here is what it looks like, without yet revealing the magic behind the additional first round and the pre-whitening phase (hidden behind the <a class="ui purple label">unknown</a>)</p>
+
+<img class="ui centered image" src="images/SQUARE/SQUARE-14.jpg">
+
+<p>To obtain this <em>Λ-set</em> we need once more time to <strong>predict some key bytes</strong>. <strong>Four more bytes</strong> to be exact, of the <strong>first subkey</strong> (before the first round key).</p>
+
+<p>The way to do this is to generate \(2^{32}\) plaintexts, all having the same bytes in the <a class="ui white label" style="background-color:white; border:1px grey solid;">unactive positions</a> and covering all the different possible bytes in the first <a class="ui yellow label">byte column</a> (right before the first round's MixColumns transformation).</p>
+
+<p>This way, once you make a key guess, you will only need to pick the relevant plaintexts instead of re-generating the correct set of plaintexts that will get transformed into a <em>Λ-set</em> at the output of the first round.</p>
+
+<img class="ui centered image" src="images/SQUARE/SQUARE-15.jpg">
+
+<p>For this attack, you need to make guesses on \(5+4=9\) bytes of subkeys, which in a worst case scenario would make you go through \(2^{8*9} = 2^{72}\) possibilities.
+
+	<div class="ui icon yellow message">
+		<i class="info circle icon"></i>
+		<div class="content">\(2^{72}\) operations is a lot, but way better than going through all the \(2^{128}\) keys of <span class="em">AES-128</span> and thus by definition it is a <strong>successful cryptanalysis</strong>.
+		</div>
+	</div>
+
+<p><strong>That's it! You've reached the end of this set :)</strong></p>
+
+<p>There is more to the Square attack or to structual attacks in general. How does it extend to <span class="em">AES-192</span> and <span class="em">AES-256</span>? What about other ciphers? How do false positives influence the complexity of the attacks? ...</p>
+
+<p>You can read more about it<!-- TODO -->, or you can look at a different attack in our next set.</p>

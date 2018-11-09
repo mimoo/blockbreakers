@@ -1,0 +1,13 @@
+<p>Now that we have obtained <strong>the last round key</strong> of our <span class="em">3-round AES</span> instance, we need to finish the job and reverse the key schedule to obtain <strong>the main key</strong>.</p>
+
+<p>Fortunately for us, reversing the <code>KeyExpansion()</code> function of AES is trivial as it was not designed to be a one-way function.</p>
+
+<div class="ui divider"></div>
+
+<p>Create an <code>InvertKeyExpansion()</code> function that takes an index (the index of the round key) and the round key, and returns the original AES key.</p>
+
+<p>Use the <a href="aes_4_key_scheduler.html" class="ui blue image label"><img src="images/AES/aes_icons-04.jpg">KeyExpansion</a> section to figure out how to do that.</p>
+
+<p>Once you're done, you can test your function on the previous attack to verify that you indeed broke your <span class="em">3-round AES</span> instance.</p>
+
+<p>This is kind of the end of this short set, the next section will only be explanatory and won't expect you to code anything. You should cover them as they are pretty straight forward to understand if you've been this far.</p>

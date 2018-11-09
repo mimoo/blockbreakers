@@ -1,0 +1,15 @@
+<p><img src="images/AES/key_schedule-06.png" alt="round"></p>
+
+<p>Our second transformation, <strong>ShiftRows</strong>, is a pretty simple one! It takes a state, look at its rows and rotate them. The first row doesn't get touched, the second one gets rotated by one position on the left, the second by two positions and the third by three positions.</p>
+
+<pre>0 1 2 3    0 1 2 3    
+4 5 6 7 -&gt; 5 6 7 4
+8 9 a b    a b 8 9
+c d e f    f c d e
+</pre>
+
+<p>Go ahead and create a <code>ShiftRows()</code> function that takes a state and returns a new state after the <strong>ShiftRows</strong> transformation.</p>
+
+<p>Are you done yet?</p>
+
+

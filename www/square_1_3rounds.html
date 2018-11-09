@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<!-- Standard Meta -->
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+		<!-- Site Properties -->
+		<title>Block Breakers - A persistent structure over 3 rounds </title>
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/reset.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/site.css">
+
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/container.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/grid.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/header.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/image.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/menu.css">
+
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/divider.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/dropdown.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/segment.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/button.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/list.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/icon.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/sidebar.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/transition.css">
+
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/step.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/item.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/message.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/progress.min.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/table.min.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/label.css">
+
+		<!-- js -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.js"></script>
+
+		<script>
+			$(document)
+			.ready(function() {
+			//
+			})
+		</script>
+
+		<!-- highlighter code -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.0.0/highlight.min.js"></script>
+		<script>hljs.initHighlightingOnLoad();</script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.0.0/styles/default.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/styles/monokai-sublime.min.css">
+
+		<!-- latex -->
+		<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">		</script>
+
+		<!-- font -->
+		<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet"> 
+
+		<!-- custom -->
+		<link rel="stylesheet" type="text/css" href="css/styles.css">
+
+	</head>
+
+	<body>
+		
+		<!-- Page Contents -->
+		<div class="ui text container">
+
+			<div class="ui secondary menu">
+				<a class="item" href="index.html">HOME</a>
+				<a class="item" href="aes.html">AES</a>
+				<a class="active item" href="square.html">SQUARE</a>
+				<a class="disabled item" href="#">LINEAR</a>
+				<a class="disabled item" href="#">DIFFERENTIAL</a>
+			</div>
+
+			<!-- progress bar -->
+			<div class="ui progress success">
+				<div class="bar" style="width:20.0%">
+
+				</div>
+			</div>
+
+			<!-- content -->
+			<h2 class="ui top attached header">A persistent structure over 3 rounds</h2>
+			<div class="ui attached stacked segment">
+
+				<p>Imagine <strong>a set of 256 plaintexts</strong>. All filled with 0s.</p>
+
+<p>Now imagine that we choose one index in all of these 256 states, and make it take the whole range of a byte.</p>
+
+<img class="ui centered image" src="images/SQUARE/SQUARE-01.jpg">
+
+<p>We'll call such a thing a <em>Λ-set</em> (delta set). And the index taking all of the values an <strong>active index</strong>.</p>
+
+<div class="ui yellow icon message">
+	<i class="info circle icon"></i>
+	<div class="content">
+		More generally, a <em>Λ-set</em> can have many active positions, and can have any value in a non-active index (as long as all the states share the same value in this index).
+	</div>
+</div>
+
+<p>Now imagine that each plaintext of the <em>Λ-set</em> goes through AES, gets encrypted, goes through the rounds' transformations, etc...</p>
+
+<p>The first thing would be to XOR them with the first round key (<strong>pre-whitening</strong>):</p>
+
+<img class="ui centered image" src="images/SQUARE/SQUARE-03.jpg">
+
+<p>And here a good observer would notice that the output of the pre-whitening round is still a <em>Λ-set</em>.</p>
+
+<p>Now, more interesting, we'll enter the <strong>first round</strong>. The first transformation, if you remember, is <strong>SubBytes</strong>:</p>
+
+<img class="ui centered image" src="images/SQUARE/SQUARE-04.jpg">
+
+<p>And as you can see, magically, the state remains a <em>Λ-set</em>. The second transformation, <strong>ShiftRows</strong>, will not change this fact:</p>
+
+<img class="ui centered image" src="images/SQUARE/SQUARE-05.jpg">
+
+<p><strong>MixColumns</strong> is a bit more tricky. Since the new column is created from a linear combination, it affects all the indexes of the output column. Since only one of the value is active, we can see that the first column entirely becomes active after that. And since the other columns of our <em>Λ-set</em> are "inactive", they will remain inactive after the transformation as well.</p>
+
+<img class="ui centered image" src="images/SQUARE/SQUARE-06.jpg">
+
+<div class="ui message">
+<p>Remember the <a href="aes_8_mixcolumns.html" class="ui blue image label"><img src="images/AES/aes_icons-08.jpg">MixColumns</a> transformation and how you compute the new column from the old one:</p>
+
+\[\begin{bmatrix}
+2a_0 + 3a_1 + 1a_2 + 1a_3\\
+1a_0 + 2a_1 + 3a_2 + 1a_3\\
+1a_0 + 1a_1 + 2a_2 + 3a_3\\
+3a_0 + 1a_1 + 1a_2 + 2a_3
+\end{bmatrix}\]
+
+<p>Here only \(a_0\) is active and such, taking the example of the first row, you can see that the result will take the entire range of a byte added to a constant.</p>
+
+\[
+\underbrace{2a_0}_\text{active} +
+\underbrace{3a_1 + 1a_2 + 1a_3}_\text{constant}
+\]
+
+</div>
+
+<div class="ui divider"></div>
+
+<img class="ui centered image" src="images/SQUARE/SQUARE-02.jpg">
+
+<p>At the end of the first round, we now have a <em>Λ-set</em> with <strong>4 active indexes</strong>.</p>
+<p>Remember, an index is <a class="ui green label">active</a> if it takes all of the different values of a byte in a set of 256 different plaintexts. An index is <a class="ui white label" style="background-color:white; border:1px grey solid;">inactive</a> if it takes the same value in the whole set of plaintext. A state in the diagram above represents the whole <em>Λ-set</em> where the green position is active and the rest inactive.</p>
+
+<p>If we analyze one more round, we can see that we still obtain a <em>Λ-set</em> at the end, with all indexes being active.</p>
+
+<img class="ui centered image" src="images/SQUARE/SQUARE-07.jpg">
+
+<p>Add one more round on top of that (and we're now at 3 rounds) and the MixColumns transformation destroys our nice <em>Λ-set</em>.</p>
+
+<img class="ui centered image" src="images/SQUARE/SQUARE-08.jpg">
+
+<p>But is it really the end of our journey? Not so much. Imagine taking the first <a class="ui red label">unknown byte</a> of every state in our destroyed <em>Λ-set</em>, right after that last MixColumns transformation, and XORing them together:</p>
+
+\[
+b_1 \oplus\\
+b_2 \oplus\\
+\cdots\\
+b_{256}
+\]
+
+<p>Now, let's detail this calculus. Here \( a_{i,j} \) represents the value of the byte at position \( i \) in the state \( j \) (if we were to index states) right before that MixColumns transformation.</p>
+
+\[
+\begin{gather*}
+2 a_{1, 0} \oplus 3 a_{1, 1} \oplus 1 a_{1, 2} \oplus 1 a_{1, 3}\\
+\oplus \\
+2 a_{2, 0} \oplus 3 a_{2, 1} \oplus 1 a_{2, 2} \oplus 1 a_{2, 3}\\
+\oplus \\
+\cdots\\
+\oplus\\
+2 a_{256, 0} \oplus 3 a_{256, 1} \oplus 1 a_{256, 2} \oplus 1 a_{256, 3}\\
+\end{gather*}
+
+\]
+
+<p>Which simplifies itself to</p>
+
+\[
+\begin{gather*}
+2 (a_{0, 0} \oplus \cdots \oplus a_{256, 0})\\
+\oplus\\
+3 (a_{0, 1} \oplus \cdots \oplus a_{256, 1})\\
+\oplus\\
+1 (a_{0, 2} \oplus \cdots \oplus a_{256, 2})\\
+\oplus\\
+1(a_{0, 3}\oplus \cdots \oplus a_{256, 3})
+\end{gather*}
+
+= 2 \times 0 \oplus 3 \times 0 \oplus 1 \times 0 \oplus 1 \times 0 = 0
+\]
+
+<p>And this works out because XORing all of the possible value of a byte is indeed \( 0 \) (which is what happened in each line up there).</p>
+
+<p>We now have a relationship between the elements of our <em>Λ-set</em>. The AddRoundKey of this last round will not change anything, while unfortunately the beginning of the next round will. The next SubBytes operation will completely destroys this equality and any semblance of structure.</p>
+
+
+<div class="ui divider"></div>
+
+<p>To check this hypothesis, start by creating a <strong>reduced</strong> version of AES with only 3 rounds in the encryption process (plus the pre-whitening phase).</p>
+
+<p>If you finished the previous <a href="aes.html" class="ui blue image label"><img src="images/AES/aes_icons-11.jpg">Set 1</a> on AES, you can clone the <code>encrypt()</code> function to a <code>EncryptWithRounds()</code> one that takes one more argument: the number of rounds. This will be useful as we will attack different reduced versions of AES from now on.</p>
+
+<div class="ui red icon message">
+	<i class="warning sign icon"></i>
+	<div class="content">
+		<strong>Remember</strong>: the last round does not apply a MixColumns transformation on the state.
+	</div>
+</div>
+
+<ol class="incrspanental" style="list-style-type: decimal">
+<li>Create a function named <code>setup()</code> that takes the main key as argument (use this key: <code>aa</code>) and produces a <em>Λ-set</em> with an active byte in index 0 and the same random value in all the other byte positions. Return the encryption of each elements of that <em>Λ-set</em> with <span class="em">3-round AES</em>.</li>
+<li>Verify that the ⊕ (XOR) of all the first bytes from the encrypted <em>Λ-set</em> is equal to zero.</li>
+<li>Verify this property for all the other byte positions.</li>
+</ol>
+
+<p>This nice structural property of AES allows the <strong>Square attack</strong> to trivially break 4 rounds of AES. Let's see how that works in the next step!</p>
+
+
+				
+				<div class="ui divider"></div>
+				<div style="text-align:center;">
+				<a class="ui right labeled icon button positive" href="square_2_attack4rounds.html">
+					<i class="right arrow icon"></i>
+					Next
+				</a>
+				</div>
+				
+
+			</div>
+
+
+
+		</div>
+
+		
+		<!-- end of container -->
+
+
+		<!-- footer -->
+		<div class="ui vertical footer segment">
+			<div class="ui container">
+				<div class="ui divided centered grid">
+
+					<div class="three wide column">
+						<h4 class="ui header">About</h4>
+						<div class="ui link list">
+							<a href="https://cryptoservices.github.io" class="item">Cryptography Services</a>
+							<a href="https://www.nccgroup.trust" class="item">NCC Group</a>
+							<a href="#" class="item">Contact Us</a>
+						</div>
+					</div>
+					<div class="three wide column">
+						<h4 class="ui header">Friends</h4>
+						<div class="ui link list">
+							<a href="https://www.cryptopals.com" class="item">Cryptopals</a>
+							<a href="https://www.microcorruption.com" class="item">Microcorruption</a>
+						</div>
+					</div>
+					<div class="three wide column">
+						<h4 class="ui header">Block Breakers</h4>
+						<p>A Cryptography Services initiative.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</body>
+</html>

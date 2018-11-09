@@ -1,0 +1,36 @@
+<p>We've got all of the functions we need to implement the key scheduler!</p>
+<p>Your task is to create a <code>KeyExpansion()</code> function outputing an <code>ExpandedKey</code> value. The <code>ExpandedKey</code> value is a series of columns. These columns are all called <strong>words</strong> and are essentially 4 bytes. The first 4 columns correspond to the original 16-byte key (which will be the first round key), the next 4 columns correspond to the next round key, and on and on... until enough <em>round keys</em> can be created.</p>
+<p><img src="images/AES/key_schedule-01.jpg" alt="key schedule"></p>
+<p>In the following picture, imagine that the key provided to AES was <code>2b7e151628aed2a6abf7158809cf4f3c</code> (in hexadecimal). This fills exactly four columns and will be the first <em>round key</em>. To obtain the first column of the next <em>round key</em>, here are the steps:</p>
+<ul>
+<li>Take the value of the previous <em>round key</em>'s last column and give it to <code>rotWord()</code></li>
+<li>Then give it to <code>subWord()</code></li>
+<li>Then XOR it to the first column of the previous <em>round key</em></li>
+<li>then XOR it to <code>rcon(round)</code> with <code>round</code> being the round number (starting at 1). We'll see what that round is later, but basically know that in AES, a plaintext goes through several rounds of transformation. Each round has its own <em>round key</em>. AES-128 requires 10 rounds, and will use 10 + 1 = 11 <em>round keys</em>.</li>
+</ul>
+<p><img src="images/AES/key_schedule-02.jpg" alt="first column"></p>
+<p>To obtain the other (3) columns of a <em>round key</em>, just XOR the previous column with the previous <em>round key</em>'s column of the same index.</p>
+<p><img src="images/AES/key_schedule-03.jpg" alt="other columns"></p>
+<div class="ui divider"></div>
+
+<p>You should now have enough functions to create the final <code>KeyExpansion()</code> function. Go ahead and do that.</p>
+
+<p>After you're done, feed it the following hexadecimal key:</p>
+
+<pre>2b7e151628aed2a6abf7158809cf4f3c</pre>
+
+<p>and make sure you get the following subkeys back:</p>
+
+<pre>2b7e151628aed2a6abf7158809cf4f3c
+a0fafe1788542cb123a339392a6c7605
+f2c295f27a96b9435935807a7359f67f
+3d80477d4716fe3e1e237e446d7a883b
+ef44a541a8525b7fb671253bdb0bad00
+d4d1c6f87c839d87caf2b8bc11f915bc
+6d88a37a110b3efddbf98641ca0093fd
+4e54f70e5f5fc9f384a64fb24ea6dc4f
+ead27321b58dbad2312bf5607f8d292f
+ac7766f319fadc2128d12941575c006e
+d014f9a8c9ee2589e13f0cc8b6630ca6</pre>
+
+<p>If you can't figure out why your function doesn't work, you can use the more detailed test vectors from the appendix A.1 of the <a href="http://csrc.nist.gov/publications/fips/fips197/fips-197.pdf">AES standard</a>. we also gave some other good resources to understand and test your implementation <a href="aes.html">in the main page of this set</a>.</p>

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<!-- Standard Meta -->
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+		<!-- Site Properties -->
+		<title>Block Breakers - 4. The Key Expansion </title>
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/reset.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/site.css">
+
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/container.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/grid.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/header.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/image.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/menu.css">
+
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/divider.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/dropdown.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/segment.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/button.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/list.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/icon.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/sidebar.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/transition.css">
+
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/step.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/item.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/message.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/progress.min.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/table.min.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/components/label.css">
+
+		<!-- js -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.js"></script>
+
+		<script>
+			$(document)
+			.ready(function() {
+			//
+			})
+		</script>
+
+		<!-- highlighter code -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.0.0/highlight.min.js"></script>
+		<script>hljs.initHighlightingOnLoad();</script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.0.0/styles/default.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/styles/monokai-sublime.min.css">
+
+		<!-- latex -->
+		<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">		</script>
+
+		<!-- font -->
+		<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet"> 
+
+		<!-- custom -->
+		<link rel="stylesheet" type="text/css" href="css/styles.css">
+
+	</head>
+
+	<body>
+		
+		<!-- Page Contents -->
+		<div class="ui text container">
+
+			<div class="ui secondary menu">
+				<a class="item" href="index.html">HOME</a>
+				<a class="active item" href="aes.html">AES</a>
+				<a class="item" href="square.html">SQUARE</a>
+				<a class="disabled item" href="#">LINEAR</a>
+				<a class="disabled item" href="#">DIFFERENTIAL</a>
+			</div>
+
+			<!-- progress bar -->
+			<div class="ui progress success">
+				<div class="bar" style="width:36.3636363636%">
+
+				</div>
+			</div>
+
+			<!-- content -->
+			<h2 class="ui top attached header">4. The Key Expansion</h2>
+			<div class="ui attached stacked segment">
+
+				<p>We've got all of the functions we need to implement the key scheduler!</p>
+<p>Your task is to create a <code>KeyExpansion()</code> function outputing an <code>ExpandedKey</code> value. The <code>ExpandedKey</code> value is a series of columns. These columns are all called <strong>words</strong> and are essentially 4 bytes. The first 4 columns correspond to the original 16-byte key (which will be the first round key), the next 4 columns correspond to the next round key, and on and on... until enough <em>round keys</em> can be created.</p>
+<p><img src="images/AES/key_schedule-01.jpg" alt="key schedule"></p>
+<p>In the following picture, imagine that the key provided to AES was <code>2b7e151628aed2a6abf7158809cf4f3c</code> (in hexadecimal). This fills exactly four columns and will be the first <em>round key</em>. To obtain the first column of the next <em>round key</em>, here are the steps:</p>
+<ul>
+<li>Take the value of the previous <em>round key</em>'s last column and give it to <code>rotWord()</code></li>
+<li>Then give it to <code>subWord()</code></li>
+<li>Then XOR it to the first column of the previous <em>round key</em></li>
+<li>then XOR it to <code>rcon(round)</code> with <code>round</code> being the round number (starting at 1). We'll see what that round is later, but basically know that in AES, a plaintext goes through several rounds of transformation. Each round has its own <em>round key</em>. AES-128 requires 10 rounds, and will use 10 + 1 = 11 <em>round keys</em>.</li>
+</ul>
+<p><img src="images/AES/key_schedule-02.jpg" alt="first column"></p>
+<p>To obtain the other (3) columns of a <em>round key</em>, just XOR the previous column with the previous <em>round key</em>'s column of the same index.</p>
+<p><img src="images/AES/key_schedule-03.jpg" alt="other columns"></p>
+<div class="ui divider"></div>
+
+<p>You should now have enough functions to create the final <code>KeyExpansion()</code> function. Go ahead and do that.</p>
+
+<p>After you're done, feed it the following hexadecimal key:</p>
+
+<pre>2b7e151628aed2a6abf7158809cf4f3c</pre>
+
+<p>and make sure you get the following subkeys back:</p>
+
+<pre>2b7e151628aed2a6abf7158809cf4f3c
+a0fafe1788542cb123a339392a6c7605
+f2c295f27a96b9435935807a7359f67f
+3d80477d4716fe3e1e237e446d7a883b
+ef44a541a8525b7fb671253bdb0bad00
+d4d1c6f87c839d87caf2b8bc11f915bc
+6d88a37a110b3efddbf98641ca0093fd
+4e54f70e5f5fc9f384a64fb24ea6dc4f
+ead27321b58dbad2312bf5607f8d292f
+ac7766f319fadc2128d12941575c006e
+d014f9a8c9ee2589e13f0cc8b6630ca6</pre>
+
+<p>If you can't figure out why your function doesn't work, you can use the more detailed test vectors from the appendix A.1 of the <a href="http://csrc.nist.gov/publications/fips/fips197/fips-197.pdf">AES standard</a>. we also gave some other good resources to understand and test your implementation <a href="aes.html">in the main page of this set</a>.</p>
+
+
+				
+				<div class="ui divider"></div>
+				<div style="text-align:center;">
+				<a class="ui right labeled icon button positive" href="aes_5_state.html">
+					<i class="right arrow icon"></i>
+					Next
+				</a>
+				</div>
+				
+
+			</div>
+
+
+
+		</div>
+
+		
+		<!-- end of container -->
+
+
+		<!-- footer -->
+		<div class="ui vertical footer segment">
+			<div class="ui container">
+				<div class="ui divided centered grid">
+
+					<div class="three wide column">
+						<h4 class="ui header">About</h4>
+						<div class="ui link list">
+							<a href="https://cryptoservices.github.io" class="item">Cryptography Services</a>
+							<a href="https://www.nccgroup.trust" class="item">NCC Group</a>
+							<a href="#" class="item">Contact Us</a>
+						</div>
+					</div>
+					<div class="three wide column">
+						<h4 class="ui header">Friends</h4>
+						<div class="ui link list">
+							<a href="https://www.cryptopals.com" class="item">Cryptopals</a>
+							<a href="https://www.microcorruption.com" class="item">Microcorruption</a>
+						</div>
+					</div>
+					<div class="three wide column">
+						<h4 class="ui header">Block Breakers</h4>
+						<p>A Cryptography Services initiative.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</body>
+</html>

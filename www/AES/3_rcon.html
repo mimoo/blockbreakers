@@ -1,0 +1,105 @@
+<p>The last helper function <strong>Rcon</strong> takes an integer as input, and gives back an array of 4 bytes with the 3 least significant bytes set to 0.</p>
+
+<p><strong>Here comes the tricky part</strong>.</p>
+
+<p>AES operates some of its transformations in the Finite Field <code>GF(2^8)</code> defined with the polynomial <code>X^8 + X^4 + X^3 + X + 1</code>. Rcon is one of these weird transformation, and is defined as <code>rcon(i) = [X^i, 0, 0, 0]</code> in that field we just talked about.</p>
+
+<p><strong>I will not ask you to understand what I just wrote</strong>, and I will even advise you to just implement this function using a <strong>lookup table</strong> (basically the result of the operations already done for you). At the end of this set, if you want to know more about AES you should come back here and re-implement it using math.</p>
+
+<p>Below is the golang code for the lookup table.</p>
+
+<pre><code>var rcon = [256]byte{
+0x8d, 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x1b, 0x36, 0x6c, 0xd8, 0xab, 0x4d, 0x9a,
+0x2f, 0x5e, 0xbc, 0x63, 0xc6, 0x97, 0x35, 0x6a, 0xd4, 0xb3, 0x7d, 0xfa, 0xef, 0xc5, 0x91, 0x39,
+0x72, 0xe4, 0xd3, 0xbd, 0x61, 0xc2, 0x9f, 0x25, 0x4a, 0x94, 0x33, 0x66, 0xcc, 0x83, 0x1d, 0x3a,
+0x74, 0xe8, 0xcb, 0x8d, 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x1b, 0x36, 0x6c, 0xd8,
+0xab, 0x4d, 0x9a, 0x2f, 0x5e, 0xbc, 0x63, 0xc6, 0x97, 0x35, 0x6a, 0xd4, 0xb3, 0x7d, 0xfa, 0xef,
+0xc5, 0x91, 0x39, 0x72, 0xe4, 0xd3, 0xbd, 0x61, 0xc2, 0x9f, 0x25, 0x4a, 0x94, 0x33, 0x66, 0xcc,
+0x83, 0x1d, 0x3a, 0x74, 0xe8, 0xcb, 0x8d, 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x1b,
+0x36, 0x6c, 0xd8, 0xab, 0x4d, 0x9a, 0x2f, 0x5e, 0xbc, 0x63, 0xc6, 0x97, 0x35, 0x6a, 0xd4, 0xb3,
+0x7d, 0xfa, 0xef, 0xc5, 0x91, 0x39, 0x72, 0xe4, 0xd3, 0xbd, 0x61, 0xc2, 0x9f, 0x25, 0x4a, 0x94,
+0x33, 0x66, 0xcc, 0x83, 0x1d, 0x3a, 0x74, 0xe8, 0xcb, 0x8d, 0x01, 0x02, 0x04, 0x08, 0x10, 0x20,
+0x40, 0x80, 0x1b, 0x36, 0x6c, 0xd8, 0xab, 0x4d, 0x9a, 0x2f, 0x5e, 0xbc, 0x63, 0xc6, 0x97, 0x35,
+0x6a, 0xd4, 0xb3, 0x7d, 0xfa, 0xef, 0xc5, 0x91, 0x39, 0x72, 0xe4, 0xd3, 0xbd, 0x61, 0xc2, 0x9f,
+0x25, 0x4a, 0x94, 0x33, 0x66, 0xcc, 0x83, 0x1d, 0x3a, 0x74, 0xe8, 0xcb, 0x8d, 0x01, 0x02, 0x04,
+0x08, 0x10, 0x20, 0x40, 0x80, 0x1b, 0x36, 0x6c, 0xd8, 0xab, 0x4d, 0x9a, 0x2f, 0x5e, 0xbc, 0x63,
+0xc6, 0x97, 0x35, 0x6a, 0xd4, 0xb3, 0x7d, 0xfa, 0xef, 0xc5, 0x91, 0x39, 0x72, 0xe4, 0xd3, 0xbd,
+0x61, 0xc2, 0x9f, 0x25, 0x4a, 0x94, 0x33, 0x66, 0xcc, 0x83, 0x1d, 0x3a, 0x74, 0xe8, 0xcb, 0x8d
+}
+</code></pre>
+
+<p><strong>Examples</strong>:</p>
+
+<ul>
+<li><code>rcon(1) = {0x01, 0x00, 0x00, 0x00}</code></li>
+<li><code>rcon(2) = {0x02, 0x00, 0x00, 0x00}</code></li>
+<li><code>rcon(3) = {0x04, 0x00, 0x00, 0x00}</code></li>
+<li><code>rcon(4) = {0x08, 0x00, 0x00, 0x00}</code></li>
+<li>...</li>
+</ul>
+
+<p>Once you are done, you can go to the next step. Ignore the rest of this page unless you are ready to do some math.</p>
+
+<div class="ui divider"></div>
+
+<div style="text-align:center;">
+	<a class="ui right labeled icon button positive" href="aes_4_key_scheduler.html">
+		<i class="right arrow icon"></i>
+		Next
+	</a>
+</div>
+
+<div class="ui divider"></div>
+
+<h2 id="math"><strong>Are you ready for some math?</strong></h2>
+<p>You need to understand four things, minus <a href="https://en.wikipedia.org/wiki/Field_(mathematics">the definition of a field</a> which is not too useful for us here:</p>
+
+<ol>
+	<li><a href="#part1">How can a byte be represented as a polynomial in this field?</a></li>
+	<li><a href="#part2">How to do addition in this field?</a></li>
+	<li><a href="#part3">How to do multiplication in this field?</a></li>
+	<li><a href="#part4">What to do when the resulting polynomial is larger or equal to <code>X^8</code>?</a></li>
+</ol>
+
+<h3 id="part1" class="ui header">How can a byte be represented as a polynomial in this field?</h3>
+
+<p>A byte is 8 bits right? Imagine this byte <code>10011010</code>. To translate this into a polynomial we just see each digit as an index, telling us if this position in our polynomial is enabled (1) or not (0).</p>
+<p><code>1</code> would be <code>1</code>, <code>10</code> would be <code>X</code>, <code>100</code> would be <code>X^2</code></p>
+
+<img class="ui image centered" src="images/AES/key_schedule-08.jpg">
+
+<p>So our previous example <code>10011010</code> would be \(X^7 + X^4 + X^3 + X + 1\)</p>
+
+<h3 id="part2" class="ui header">How to do addition in this field?</h3>
+
+<p>The addition behaves like a XOR. This means that for example \(X + X = 0\) or \(1 + 1 = 0\).</p>
+
+<h3 id="part3" class="ui header">How to do multiplication in this field?</h3>
+
+<p>Like you've always been doing multiplications of polynomials. For example:</p>
+
+\[ (X^2 + X) ( X^4 + 1) = X^2 \times X^4 + X^2 \times 1 + X \times X^4 + X \times 1 = X^6 + X^2 + X^5 + X \]
+
+<h3 id="part4" class="ui header">What to do when the resulting polynomial is larger or equal to <code>X^8</code>?</h3>
+
+<p>So here is the tricky part. You must have wondered "but if I get a polynomial larger or equal to \(X^8\) how would I convert that back to a byte? And you were right to ask yourself this question.</p>
+
+<p>Basically, additions are done modulo a polynomial, in the case of AES this polynomial is:</p>
+
+\[ X^8 + X^4 + X^3 + X + 1 \]
+
+<p>How this helps, is that, this <strong>AES polynomial</strong> is equal to 0 thus we have</p>
+
+\[ X^8 = X^4 + X^3 + X + 1 \]
+
+<p>which solves the case where you would have exactly \( X^8 \). (Remember, coefficients are only 0 or 1, no negative signs. So if you move things around, you don't change the sign.)</p>
+
+<p>Now, let's imagine that we have made a multiplication that gives us something larger, \( X^9 \) for example. What we would realize is that \(X^9 = X \times X^8\) which can be written as</p>
+
+\[ X \times (X^4 + X^3 + X + 1) = X^5 + X^3 + X + 1 \]
+
+<p>And there you have it. That's all there is to it. If the result is still bigger than \( X^8 \) just repeat this until the larger power of \(X\) is no more than \(7\).</p>
+
+<div class="ui divider"></div>
+
+<p>Now you know enough to implement this function in math!</p>

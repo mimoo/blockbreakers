@@ -1,0 +1,18 @@
+<p><img src="images/AES/key_schedule-04.png" class="ui image centered" alt="aes internal state"></p>
+
+<p>The plaintext fed to AES, and that is then manipulated until it becomes the ciphertext, is internaly represented as <strong>a square of 4 rows and 4 columns</strong>. This AES internal square representation is called a "<strong>state</strong>", and the different transformations applied to it through-out the encryption (or decryption) are regrouped in <strong>rounds</strong> each involving a different <strong>round key</strong>. The <strong>round keys</strong> are derived from the main key. (This should sound familiar by now.)</p>
+
+<div class="ui divider"></div>
+<p>Your first task will be to implement the internal state representation of AES. It is visually represented as a 4x4 square where each box is a byte. But this is only a visual representation. In code you can implement that as you wish: you could create an internal structure containing 4 arrays of 4 bytes (that would hold the columns of the square), or use an array of 16 bytes... whatever you think is  best.</p>
+
+<div class="ui message">
+	<p><strong>Don't worry too much about this</strong>: the important piece here is to represent the bytes correctly. This is because we will operate on these bytes later on. And this step will make more sense as we continue to implement AES. You can always come back here later and re-implement the internal representation of a state.</p>
+</div>
+
+<p>Once you are done, declare this plaintext in code: <code>this is one text</code> and transform it into an AES state. Then implement a function <code>printState()</code> that will print a state as a 4x4 square on the screen.  <strong>Be careful, the input is represented in columns and not in rows!</strong> (See the first diagram appearing in this page.) If everything worked correctly, here is what you should see displayed:</p>
+<pre>74 20 6f 74
+68 69 6e 65
+69 73 65 78
+73 20 20 74
+</pre>
+<p>If you're set, go to the next step!</p>
