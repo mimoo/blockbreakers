@@ -23,7 +23,7 @@
 <p>Imagine that <strong>you make a guess for the first byte of the last round key</strong>. You can now reverse the value of the state, from each of your <a class="ui grey label">ciphertext</a> (which you know, this is a <strong>chosen-plaintext attack</strong>) up until the state where we know our observations hold.</p>
 
 <div class="ui message">
-	<p>There exist several classes of attacks, which are ranked according to how much leway the attacker gets. A <strong>chosen-plaintext attack</strong> is when the attacker can encrypt any plaintexts he wants, and observe the resulting ciphertexts. A <strong>ciphertext-only attack</strong> is when an attacker only have access to a set of ciphertexts. The latter one is obviously weaker, but is ranked as a stronger attack. This is because if an attacker can use this little information to break a cipher, then his attack is pretty good :)</p> 
+	<p>There exist several classes of attacks, which are ranked according to how much leeway the attacker gets. A <strong>chosen-plaintext attack</strong> is when the attacker can encrypt any plaintexts he wants, and observe the resulting ciphertexts. A <strong>ciphertext-only attack</strong> is when an attacker only have access to a set of ciphertexts. The latter one is obviously weaker, but is ranked as a stronger attack. This is because if an attacker can use this little information to break a cipher, then his attack is pretty good :)</p> 
 </div>
 
 <p>At this point, it's enough to XOR all of the <a class="ui pink label">reversed bytes</a> at the state right before the last SubBytes to check if they XOR out to \( 0 \). If they do, you might really well have guessed the right byte for the last round key.</p>
